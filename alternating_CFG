@@ -1,0 +1,81 @@
+###############################################
+#                                             #
+#	Alternating Control Flow Reconstruction   #
+#                                             #
+###############################################
+
+
+Les instructions créant des branches rendent la reconstruction de CFG
+difficile. Une analyse statique peut parfois déterminer un ensemble de
+valeurs possibles et donc de prévoir les branches "empruntables", mais
+si ce n'est pas le cas il est alors nécessaire de créer un graphe beaucoup
+plus grand (en nombre d'arêtes) qu'il pourrait l'être.
+Ce papier propose donc d'alterner entre sous- et sur-estimation du graphe
+afin d'obtenir un graphe utilisable et relativement exact. 
+
+1. Introduction
+
+Le problème le plus important lors de la construction d'un CFG est celui
+des sauts dynamiques (instructions du type jmp eax, avec eax qui est
+déterminé à l'exécution du programme).
+La sur-approximation consiste à
+partir d'un graphe vide, et de suivre le chemin d'exécution en propageant
+les données. Lorsqu'on rencontre un branchement indirect, les directions
+possibles sont estimées à partir du graphe partiel déjà construit, et
+les arêtes correspondantes sont ensuit ajoutées au graphe. Il est parfois
+nécessaire d'approximer les arêtes par excès : si les informations ne sont
+pas suffisantes, le nombre d'arêtes peut être la taille de la mémoire.
+Cela rend l'analyse peu précise et le graphe parfois inutilisable, puisque
+les "fausses" arêtes créent des branches qui sont également suivies.
+Une sous-approximation est également possible en déterminant les valeurs
+possibles à l'exécution.
+Ce papier propose d'alterner entre les deux approximations (sur et sous) afin
+d'obtenir un CFG qui peut contenir des arêtes "fausses", mais également
+ne pas avoir de bonnes arêtes, tout en étant assez proche du CFG réel.
+
+2. Exemple
+
+Toutes les adresses sont envisagées par la sur-approximation, alors
+que la sous-approximation donne deux valeurs possibles. Ces deux 
+valeurs peuvent ensuite mener à deux valeurs chacunes pour y, grâce
+à la sur-approximation.
+
+3. Sémantiques paramétrées pour du contrôle de flot bas niveau
+3.1 Intermediate Language
+
+Permet d'abstraire l'assembleur :
+
+IL :
+
+Stmt : m[exp1] := exp2 | if exp1 jmp exp2 | halt
+Exp  : cte | m[exp] | exp bop exp | uop exp
+bop  : + | - | / | * | & | \| | << | >> | ^ | \|\| | && | == | !=
+uop  : ! | ~
+
+L est une partie de N représentant toutes les adresses.
+Un programme est un couple (l0, P) où l0 est l'adresse de départ et P
+est une fonction L --> Stmt x L qui à toute adresse du programme associe
+une instruction et l'adresse de l'instruction suivante (celle qui suit
+directement, seule la taille de l'instruction est importante ici).
+
+IL- = IL - halt
+
+
+3.2 Sémantique paramétrée 
+
+L'approche utilisée prend la forme d'une sémantique pour le langage IL-.
+Pour un état donné qui exécute un saut indirect, la sémantique convertit
+le saut en un ensemble d'arêtes possibles qui pointent sur les cibles
+correspondantes. Le CFG est construit avec toutes ces arêtes.
+Sémantique Sa = (Aa, i, f, g, Ua) :
+-Aa est un treillis, Aa = (A, U, n, C, _L, T), où U est l'union,
+	n intersection, C inclusion, _L l'ensemble vide, et T l'ensemble total
+-i est l'élément initial, dans Aa
+-f[C](S) : (Stmt-, A) --> A la fonction de transfert pour les éléments de IL-
+-g[e1,...,en]S : Exp^n x A --> P(Z^n) évalue les vecteurs d'expressions 
+	e1,...,en en ensemble de vecteurs de valeurs concrètes.
+-Ua : A x A --> A est utilisée pour réunir les éléments de A qui ont la
+même destination.
+
+
+	

@@ -1,0 +1,25 @@
+IDAPro = état de l'art
+Considère que les variables gloables sont référencées comme 
+[adresse absolue] et que les variables locales sont référencées par
+[esp + offset] ou [ebp - offset].
+Mais ne détecte pas les accès à des champs de structures ou des éléments
+de tableaux ou encore de variables accessibles seulement à travers des
+pointeurs. Ne donne aucune information sur les variables allouées dans le tas.
+
+VSA + ASI permettent de récupérer des infos sur des variables accédées
+indirectement et d'identifier des structures, tableaux même imbriqués.
+
+Modèle pour la mémoire : pas terrible :
+	-Les variables dans le tas ont une adresse dynamique -> ne sont pas 
+accessibles
+	-Une adresse dans la pile peut représenter des variables différentes à des
+		moments différents (dans différentes fonctions par exemple).
+Modèle proposé : découpage de la mémoire en régions, une par fonction par
+exemple.
+3 sortes de région :
+	1. Régions globales pour des variables globales
+	2. Régions AR (Activation Records) contenant les variables d'une fonction
+	3. Régions malloc qui contiennent les blocs utilisés par malloc
+
+
+
