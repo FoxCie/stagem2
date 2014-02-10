@@ -9,7 +9,7 @@ pointeurs. Ne donne aucune information sur les variables allouées dans le tas.
 VSA + ASI permettent de récupérer des infos sur des variables accédées
 indirectement et d'identifier des structures, tableaux même imbriqués.
 
-Modèle pour la mémoire : pas terrible :
+Modèle pour la mémoire : tableau : pas terrible :
 	-Les variables dans le tas ont une adresse dynamique -> ne sont pas 
 accessibles
 	-Une adresse dans la pile peut représenter des variables différentes à des
@@ -20,6 +20,106 @@ exemple.
 	1. Régions globales pour des variables globales
 	2. Régions AR (Activation Records) contenant les variables d'une fonction
 	3. Régions malloc qui contiennent les blocs utilisés par malloc
+
+
+3. Généralités sur l'approche
+
+Le but est de diviser les régions en entités représentant des variables,
+appelées a-locs (abstract locations). 
+
+3.1 Accès mémoire dynamiques
+
+L'approche semi-naïve consiste à considérer que les variables globales
+sont accédées via leur adresse (écrite statiquement dans le code), et que
+les variables locales sont accédées par des offsets ([ebp - offset] ou 
+[esp + offset]. Cependant, lorsqu'on accède à des variables allouées
+dynamiquement, ou bien à des champs de structures ou encore à des éléments
+de tableaux, le code utilise souvent des opérandes dynamiques, dont la
+valeur est déterminée à l'exécution. Ce genre de variables ne peut pas
+être découvert par une approche semi-naïve. Lorsqu'un opérande vient de la
+mémoire, il est nécessaire de connaître la (les) valeur(s) qu'il peut
+contenir. Les VSA (Value-Set Analysis) peuvent justement fournir cette
+information.
+
+3.2 Le problème de la granularité et de l'expressivité
+
+Considérant l'exemple de la dépendance des données, différentes approches
+peuvent donner des résultats différents. Par exemple, l'approche semi-naïve
+indique dans l'exemple donné que la lecture d'une variable pourrait 
+dépendre de l'écriture d'une autre, ce qui n'est pas le cas. Une partition
+plus fine de la région mémoire permet d'obtenir ce résultat. Une troisième
+partition, identique à la seconde mais plus performante offre le même
+résultat avec un nombre de variables moins important.
+
+
+4. Environnement
+4.1 Value-Set Analysis
+
+VSA permet d'avoir un ensemble de valeurs possibles pour chaque registre
+et chaque adresse en tout point du programme. VSA analyse simultanément
+les valeurs numériques et les adresses, puisqu'elles sont indifférenciables
+à l'exécution. VSA se base sur l'algorithme semi-naïf pour initialiser les
+valeurs de la mémoire et des registres. 
+Graphe d'appels : graphe étiqueté dont les sommets sont des procédures, 
+les arêtes des appels et les étiquettes représentent le site d'appel. Une
+chaine d'appels est une suite de sites (c1,...,cn) telle que c1 correspond
+à la procédure d'entrée et il existe un chemin dans le graphe étiqueté par
+c1,...,cn. CallString est l'ensemble des des chaînes d'appels.
+
+Value-Sets : n-uplet d'intervalles avec un pas pouvant être différent de 1.
+Chaque élément du n-uplet représente les valeurs dans une région mémoire
+particulière. VSA permet :
+	-D'obtenir des informations sur les accès mémoire dynamiques
+	-De représenter des valeurs non contigües (par exemple tous les premiers
+champs d'un tableau de structure)
+	-De mettre à jour la mémoire, ce qui permet dobtenir des valeurs correctes
+lors de l'utilisation de valeurs lues depuis la mémoire dans des sauts
+dynamiques.
+
+4.2 Aggregate Structure Identification
+
+ASI considère tous les aggrégats comme une séquence d'octets, sans regarder
+ce qui est connu sur les types. L'aggrégat est alors divisé en fonction des
+accès faits par le programme. Les plus petites divisions sont appelées
+atomes. ASI est spécifiée via un langage, DAC (Data Access Constraint).
+Deux types de constructions : 
+	-DataRef représente un ensemble d'octets ainsi que la façon dont il est 
+utilisé par le programme. 
+	-UnifyConstraint permet de définir le flux de données, partant du
+postulat qu'un flux entre deux données implique qu'elles ont même type.
+
+3 sortes de DataRef :
+	-Si p est dans ProgVar, P fait référence à tous les octets de la variable 
+P
+	-DataRef[l:u] fait référence aux octets l à u dans DataRef.
+	-DataRef\n considère DataRef comme un tableau de n éléments, et fait
+référence à tous les octets d'un élément de ce tableau.
+
+ASI retourne un graphe acyclique orienté dont les noeuds représentent un
+ensemble d'octets ; 
+	les séquences d'octets utilisées comme des tableaux
+sont représentées par des noeuds "tableaux", un noeud tableau a un enfant
+et le graphe orienté acyclique dont cet enfant est racine représente la
+structure des éléments du tableau ; 
+	les séqences d'octets utilisées comme des structures est représentée
+par un noeud "structure", comme pour les noeuds tableaux, les noeuds 
+structures contiennent la taille du tableau, et les enfants représentent
+les champs de la structure ;
+	les noeuds sont partagés s'il existe un flux de données dans le 
+programme entre les séquences, que ce soit directement ou indirectement.
+
+
+5. Retrouver les a-locs par itération
+
+Idée : utiliser les résultats de VSA pour générer des flux de données
+qui permettront d'affiner les types des variables avec ASI, ce qui
+permettra d'affiner les valeurs des variables avec VSA, etc...
+D'où l'algorithme :
+	1. Initialisation : VSA avec approche semi-naïve
+	2. Générer le code DAC avec les résultats de VSA
+	3. Exécuter ASI
+	4. Exécuter VSA
+	5. Répéter 2, 3, 4 jusqu'à convergence
 
 
 
