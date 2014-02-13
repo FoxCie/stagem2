@@ -1,0 +1,43 @@
+###########################################################
+#                                                         #
+#      Analyzing Memory Accesses in x86 Executables       #
+#                                                         #
+###########################################################
+
+
+1. Introduction
+
+L'analyse de programmes exécutables est de plus en plus utilisée, que ce
+soit pour s'assurer de la légitimité de code propriétaire, pour comprendre
+un ver ou virus ou encore pour assurer une compatibilité entre différentes
+plateformes. Du fait de l'aspect malicieux de certains logiciels, la table
+des symboles peut être absente ou falsifiée, et ne peut donc être utilisée
+comme une source d'informations fiables. Il est donc nécessaire de ne
+déterminer les types des variables et leurs lieux que par l'utilisation qu'en
+fait le programme. 
+Ce papier introduit la notion d'a-loc (abstract location), qui constitue une
+représentation abstraite des lieux des variables, déterminées statiquement,
+les variables globales étant représentées par des adresses statiques et les
+variables locales par des offsets sur les pointeurs de la pile. 
+Un des poblèmes majeurs qui survient lors de l'analyse de code est la
+présence d'accès mémoire indirects, dont les valeurs ne sont pas directement
+dans le code mais déterminés à l'exécution. Ce papier propose une façon de
+déterminer une sur-approximation des valeurs possibles pour ce type
+d'opérandes.
+Ce papier présente donc un algorithme, VSA (Value-Set Analysis) permettant
+pour chaque donnée de déterminer un ensemble de valeurs et d'adresses
+possibles lui correspondant, puis l'utilisation qu'on peut en faire en
+classart chaque donnée en tant qu'utilisée, tuée ou possiblement tuée.
+L'analyse fait une analyse aussi bien numérique que sur les adresses, les
+deux n'étant différenciées à l'exécution que par leur utilisation.
+
+3.
+
+Utilisation de dictionnaires applicatifs qui permettent d'avoir une bonne
+efficacité mémoire lorsque beaucoup de valeurs son proches.
+
+
+4. Value-Set analysis
+
+
+

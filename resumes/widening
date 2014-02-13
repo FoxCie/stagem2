@@ -1,0 +1,17 @@
+Si (P, <) est un "poset", alors un opérateur de "set-widening" est une
+fonction partielle f : Part(P) -> P qui vérifie :
+	(i) Covering : Si S est dans Part(P), et f(S) est défini, alors pour tout
+x dans S, x < f(S)
+	(ii) Termination : pour toute chaine ascendante (xi)i, la chaine
+definie par : y0 = x0, et pour tout i > 0, yi = f({xj / 0 <= j <= i}) est 
+egalement une chaine ascendante, qui se stabilise apres un nombre fini de
+termes.
+
+
+     .
+    / \	
+   / | \
+  /  |  \		L'ordre de (P, <) est un ordre large (si x < y, il se peut que
+ /   .   \		x = y).
+/_________\    
+
