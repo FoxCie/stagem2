@@ -1,0 +1,26 @@
+#############################################################
+#                                                           # 
+#                         SLAM                              # 
+#                                                           # 
+#############################################################
+
+
+SLAM analyse du code C, pad de l'assembleur, mai présente néanmoins quelques
+aspects intéressants. 
+
+Brièvement, SLAM transforme un programme C en un programme booléen, 
+c'est-à-dire un programme qui a la même structure de contrôle de flot,
+mais dont toutes les variables sont booléennes. Toutes les variables du
+programme booléen correspondent à un prédicat dans le programme C.
+SLAM résout ensuite l'atteignabilité des différents états du programme
+booléen, puis cherche d'autres prédicats pour affiner le programme
+booléen en analysant la "faisabilité" des chemins dans le programme C.
+On itère ainsi jusqu'à convergence.
+
+
+INTERESSANT : Ils préntendent avoir prouvé que si une analyse par
+recherche de point fixe avec widening (pour assurer la terminaison) peut
+donner une réponse définitive (i.e. erreur ou programme validé), alors
+un processus de raffinement itératif (utilisé ici) temrinera avec un
+résultat définitif.
+
