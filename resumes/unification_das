@@ -1,0 +1,12 @@
+###################################################################
+#                                                                 #    
+#                                                                 # 
+# Unification-based Pointer Analysis with Directional Assignments #
+#                                                                 #    
+#                                                                 # 
+###################################################################
+
+
+Pointeurs de premier niveau (top-level pointers) = pointeurs sur un objet
+qui n'est pas un pointeur.
+

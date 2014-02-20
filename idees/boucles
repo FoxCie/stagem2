@@ -1,0 +1,62 @@
+VSA sur les boucles créent des ensembles qui ne sont pas des singletons,
+mais il se peut qu'à la fin un registre ait une valeur déterminée. Que se
+passe-t-il ? VSA trouve-t-il la bonne valeur ou bien en considère-t-il 
+plusieurs également ?
+
+
+Exemple :
+
+1.	mov eax, 0x12341234
+2.	mov edx, 0
+3.	mov ecx, eax
+4.	inc eax
+5.	inc edx
+6.	cmp edx, 5
+7.	jnz 3
+8.	jmp [ecx]
+
+
+VSA donne :
+
+1.	eax --> 0[0x12341234, 0x12341234]
+
+2.	eax --> 0[0x12341234, 0x12341234], 
+	edx --> 0[0, 0]
+
+3.	eax --> 1[0x12341234, 0x12341238], 
+	edx --> 1[0, 4], 
+	ecx --> 1[0x12341234, 0x12341238]
+
+4.	eax --> 1[0x12341235, 0x12341239],
+	edx --> 1[0, 4],
+	ecx --> 1[0x12341234, 0x12341238]
+
+5.	eax --> 1[0x12341235, 0x12341239],
+	edx --> 1[1, 5],
+	ecx --> 1[0x12341234, 0x12341238]
+
+6.	eax --> 1[0x12341235, 0x12341239],
+	edx --> 1[1, 5],
+	ecx --> 1[0x12341234, 0x12341238]
+
+7.	eax --> 1[0x12341235, 0x12341239],
+	edx --> 1[1, 5],
+	ecx --> 1[0x12341234, 0x12341238]
+
+8.	eax --> 1[0x12341235, 0x12341239],
+	edx --> 1[1, 5],
+	ecx --> 1[0x12341234, 0x12341238]
+
+Mais en 8, en réalité, ecx --> 0[0x12341238, 0x12341238]. 
+
+--> Dans les boucles, utiliser :
+	-invariants ?
+	-autre ?
+
+-Invariants en fin de corps de boucles :
+	edx < 5
+	ecx = eax-1
+	ecx = 0x12341234 + edx - 1
+
+	--> en fin de boucle : edx = 5 donc ecx = 0x12341238
+

@@ -1,0 +1,20 @@
+Deux étapes : 
+
+1. "décompilation" : compilation à l'envers --> permet d'avoir des types sur
+les registres. VSA permet de tracker les valeurs des registres pour plus
+de précision.
+
+2. "allocation" : on essaie de "transmettre" les types des registres à des
+a-locs. 
+
+
+
+      .
+     / \
+    /   \			2. Ne fonctionne qu'avec des types primitifs, il peut
+   /  |  \				être intéressant d'utiliser ASI pour déterminer des
+  /   |   \				types complexes, comme des structures, des tableaux,
+ /    .    \			etc...
+/___________\
+
+
