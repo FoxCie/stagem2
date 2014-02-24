@@ -5,7 +5,7 @@
 #############################################################
 
 
-SLAM analyse du code C, pad de l'assembleur, mai présente néanmoins quelques
+SLAM analyse du code C, pas de l'assembleur, mais présente néanmoins quelques
 aspects intéressants. 
 
 Brièvement, SLAM transforme un programme C en un programme booléen, 
@@ -21,6 +21,6 @@ On itère ainsi jusqu'à convergence.
 INTERESSANT : Ils préntendent avoir prouvé que si une analyse par
 recherche de point fixe avec widening (pour assurer la terminaison) peut
 donner une réponse définitive (i.e. erreur ou programme validé), alors
-un processus de raffinement itératif (utilisé ici) temrinera avec un
+un processus de raffinement itératif (utilisé ici) terminera avec un
 résultat définitif.
 

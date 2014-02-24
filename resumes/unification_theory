@@ -1,0 +1,25 @@
+############################################################
+#                                                          #
+#                 Unification Theory                       #
+#      (in Handbook of Automated Reasoning, Volume 2)      #
+#                                                          #
+############################################################
+
+
+Unification : si s = f(a, x) et t = f(y, b), est-il possible de remplacer
+les variables x, y dans s et t de telle sorte que les deux termes obtenus
+soient égaux (syntaxiquement). 
+Dans cet exemple, en substituant a à y et b à x, on obtient le terme unifié
+f(a, b). On note cette substitution sigma := {x --> b, y --> a} et on l'écrit
+suffixée : x\sigma = f(a, b) = t\sigma.
+
+s2 = f(a, x) et t2 = f(x, b) ne peuvent pas être unifiés, puisqu'il faudrait
+remplacer x par a et x par b.
+// POURQUOI ? {a --> x, b --> x} ne fonctionne pas ? On ne peut pas substituer
+// avec un terme déjà présent ?
+
+On veut parfois résoudre plus que le problème de décision de l'unification
+en trouvant un unificateur. Seulement, il en existe une infinité.
+Heureusement, il existe ce qu'on appelle l'unificateur le plus général (most
+general unifier).
+

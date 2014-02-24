@@ -10,3 +10,52 @@
 Pointeurs de premier niveau (top-level pointers) = pointeurs sur un objet
 qui n'est pas un pointeur.
 
+Emplacements (locations) représentés par un couple (phi, alpha), phi est un
+ensemble de symboles et aplha représente le contenu. Un emplacement 
+"pointe sur" un autre si son contenu est un pointeur vers ce dernier.
+
+Un programme est correctement typé (correctly typed, well typed) si les
+symboles sont associés avec des ensembles "pointe sur" corrects.
+
+Algorithme :
+
+	s est un symbole,
+	tau est un emplacement ::= (phi, alpha),
+	phi est un id ::= {s1, ..., sn}
+	alpha est un contenu ::= bottom | ptr(tau)
+
+	on définit une relation d'ordre sur les ptr :
+		ptr(phi1, alpha1) < ptr(phi2, alpha2) <=> phi1 inclus dans phi2
+
+		inclusion au sens large, < est un opérateur large ici
+
+
+1.   A |-- x : (phi1, alpha1)   A |-- y : (phi2, alpha2)
+                     alpha2 < alpha1
+	-----------------------------------------------------
+                   A |-- welltyped(x = y)
+
+
+2.       A |-- x : (phi, alpha)     A |-- y : tau
+                     ptr(tau) < alpha
+    ----------------------------------------------------
+                   A |-- welltyped(x = &y)
+
+
+3.  A |-- x : (phi1, alpha1)   A |-- y : (phi2, ptr(tau))
+                    tau = (phi3, alpha3)
+                      alpha3 < alpha1
+  --------------------------------------------------------
+                  A |-- welltyped(x = *y)
+
+4.  A |-- x : (phi1, ptr(tau))  A |-- y : (phi2, alpha2)
+                    tau = (phi3, alpha3)
+                     alpha2 < alpha3
+   -----------------------------------------------------
+                  A |-- welltyped(*x = y)
+
+
+Pour les appels de fonctions, il faut faire la même chose, avec les
+arguments dans un sens et les valeurs de retour dans l'autre.
+
+
