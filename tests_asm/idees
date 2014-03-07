@@ -1,0 +1,24 @@
+###############################################################
+#                                                             #
+#                                                             #
+# Resultats et idees generales sur la reconnaissance de types #
+#                                                             #
+#                                                             #
+###############################################################
+
+
+Supposition : les opérateurs bit à bit ne sont utilisés que sur des
+entiers. Problème : NULL = 0 -> initialisation d'un pointeur à NULL
+par un xor ptr,ptr. 
+
+Est-ce gênant ? Ce serait l'initialisation, on pourrait écraser ce type
+plus tard, ou encore repérer le cas de NULL. 
+Existe-t-il d'autres cas où un pointeur est un opérande d'un opérateur
+bit à bit ?
+
+
+
+
+
+
+

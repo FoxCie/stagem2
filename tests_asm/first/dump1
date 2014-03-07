@@ -1,0 +1,30 @@
+000000000040054d <main>:
+  40054d:	push   rbp
+  40054e:	mov    rbp,rsp
+  400551:	sub    rsp,0x20
+  400555:	mov    DWORD PTR [rbp-0x14],edi
+  400558:	mov    QWORD PTR [rbp-0x20],rsi
+  40055c:	mov    DWORD PTR [rbp-0x4],0x1
+  400563:	jmp    400592 <main+0x45>
+  400565:	mov    eax,DWORD PTR [rbp-0x4]
+  400568:	cdqe   
+  40056a:	lea    rdx,[rax*8+0x0]
+  400571:
+  400572:	mov    rax,QWORD PTR [rbp-0x20]
+  400576:	add    rax,rdx
+  400579:	mov    rax,QWORD PTR [rax]
+  40057c:	mov    rsi,rax
+  40057f:	mov    edi,0x400654
+  400584:	mov    eax,0x0
+  400589:	call   400430 <printf@plt>
+  40058e:	add    DWORD PTR [rbp-0x4],0x1
+  400592:	mov    eax,DWORD PTR [rbp-0x4]
+  400595:	cmp    eax,DWORD PTR [rbp-0x14]
+  400598:	jl     400565 <main+0x18>
+  40059a:	mov    edi,0xa
+  40059f:	call   400420 <putchar@plt>
+  4005a4:	mov    eax,0x0
+  4005a9:	leave  
+  4005aa:	ret    
+  4005ab:	nop    DWORD PTR [rax+rax*1+0x0]
+

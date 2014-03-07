@@ -23,3 +23,13 @@ en trouvant un unificateur. Seulement, il en existe une infinité.
 Heureusement, il existe ce qu'on appelle l'unificateur le plus général (most
 general unifier).
 
+J.A. Robinson a montré que des termes unifiables ont un unificateur plus
+général. Il se sert de l'unification pour 
+Le théorème d'Herbrand implique qu'un nombre fini d'instances d'ordre 0
+(ground instances), c'est-à-dire des instances dont les variables ont été
+remplacées par des expressions sans variables) est suffisant pour prouver
+l'insatisfaisabilité. Le problème est donc de trouver les instanciations
+appropriées. On peut chercher parmi toutes les instanciations d'ordre 0
+possibles, mais le temps de calcul explose. 
+
+
