@@ -1,0 +1,4 @@
+utilisation des registres pour passer des paramètres : 
+rdi, rsi, rdx, rcx, r8, r9, xmm0-7
+
+
