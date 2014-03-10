@@ -1,0 +1,433 @@
+000000000040065d <emptyList>:
+  40065d:	push   rbp                           
+  40065e:	mov    rbp,rsp
+  400661:	sub    rsp,0x10
+  400665:	mov    edi,0x10                     ; sizeof *ret
+  40066a:	call   400550 <malloc@plt>
+  40066f:	mov    QWORD PTR [rbp-0x8],rax      ; ret := ptr
+  400673:	mov    rax,QWORD PTR [rbp-0x8]      ; rax := ptr
+  400677:	mov    QWORD PTR [rax],0x0          ; *ret := int | ptr
+  40067e:	mov    rax,QWORD PTR [rbp-0x8]		
+  400682:	mov    QWORD PTR [rax+0x8],0x0      ; *(ret+8) := int | ptr
+  400689:
+  40068a:	mov    rax,QWORD PTR [rbp-0x8]
+  40068e:	leave  
+  40068f:	ret                                 ; return ptr
+
+; Meme sans connaitre le prototype de malloc, on sait que ret est ptr (677)
+
+0000000000400690 <deleteList>:
+  400690:	push   rbp
+  400691:	mov    rbp,rsp
+  400694:	sub    rsp,0x30
+  400698:	mov    QWORD PTR [rbp-0x28],rdi     ; pl
+  40069c:	cmp    QWORD PTR [rbp-0x28],0x0     ; pl := -int- | ptr --> pl := ptr ptr
+  4006a1:	jne    4006a5 <deleteList+0x15>
+  4006a3:	jmp    40070c <deleteList+0x7c>
+  4006a5:	mov    rax,QWORD PTR [rbp-0x28]     ; rax := -int- | ptr
+  4006a9:	mov    rax,QWORD PTR [rax]          ; avant : rax := ptr ptr ; apres : rax := ptr
+  4006ac:	mov    QWORD PTR [rbp-0x10],rax     ; l = *pl : l := ptr
+  4006b0:	cmp    QWORD PTR [rbp-0x10],0x0     ; l := int | ptr
+  4006b5:	jne    4006b9 <deleteList+0x29>
+  4006b7:	jmp    40070c <deleteList+0x7c>
+  4006b9:	mov    rax,QWORD PTR [rbp-0x10]     ; rax := -int- | ptr
+  4006bd:	mov    rax,QWORD PTR [rax]          ; avant : rax := ptr
+  4006c0:	mov    QWORD PTR [rbp-0x8],rax      ; e
+  4006c4:	mov    QWORD PTR [rbp-0x18],0x0     ; prev := int | ptr
+  4006cb:
+  4006cc:	jmp    4006ee <deleteList+0x5e>
+  4006ce:	mov    rax,QWORD PTR [rbp-0x8]
+  4006d2:	mov    QWORD PTR [rbp-0x18],rax     ; prev = e
+  4006d6:	mov    rax,QWORD PTR [rbp-0x8]      ; e := ptr struct
+  4006da:	mov    rax,QWORD PTR [rax+0x8]      ; avant : rax := ptr struct 
+  4006de:	mov    QWORD PTR [rbp-0x8],rax      ; e := ptr liste
+  4006e2:	mov    rax,QWORD PTR [rbp-0x18]  
+  4006e6:	mov    rdi,rax
+  4006e9:	call   4004f0 <free@plt>
+  4006ee:	cmp    QWORD PTR [rbp-0x8],0x0      
+  4006f3:	jne    4006ce <deleteList+0x3e>
+  4006f5:	mov    rax,QWORD PTR [rbp-0x10]
+  4006f9:	mov    rdi,rax
+  4006fc:	call   4004f0 <free@plt>
+  400701:	mov    rax,QWORD PTR [rbp-0x28]
+  400705:	mov    QWORD PTR [rax],0x0
+  40070c:	leave  
+  40070d:	ret    
+
+000000000040070e <addFirstElement>:
+  40070e:	push   rbp
+  40070f:	mov    rbp,rsp
+  400712:	mov    QWORD PTR [rbp-0x8],rdi            ; rdi := ptr
+  400716:	mov    QWORD PTR [rbp-0x10],rsi           
+  40071a:	cmp    QWORD PTR [rbp-0x8],0x0
+  40071f:	jne    400723 <addFirstElement+0x15>
+  400721:	jmp    400795 <addFirstElement+0x87>
+  400723:	mov    rax,QWORD PTR [rbp-0x8]            ; l := ptr
+  400727:	mov    rax,QWORD PTR [rax]                ; avant : rax := ptr
+  40072a:	test   rax,rax
+  40072d:	jne    400760 <addFirstElement+0x52>
+  40072f:	mov    rax,QWORD PTR [rbp-0x8]            ; 
+  400733:	mov    rdx,QWORD PTR [rbp-0x10]
+  400737:	mov    QWORD PTR [rax],rdx
+  40073a:	mov    rax,QWORD PTR [rbp-0x8]
+  40073e:	mov    rdx,QWORD PTR [rbp-0x10]
+  400742:	mov    QWORD PTR [rax+0x8],rdx
+  400746:	mov    rax,QWORD PTR [rbp-0x10]
+  40074a:	mov    QWORD PTR [rax+0x10],0x0
+  400751:
+  400752:	mov    rax,QWORD PTR [rbp-0x10]
+  400756:	mov    QWORD PTR [rax+0x8],0x0
+  40075d:
+  40075e:	jmp    400795 <addFirstElement+0x87>
+  400760:	mov    rax,QWORD PTR [rbp-0x8]
+  400764:	mov    rdx,QWORD PTR [rax]
+  400767:	mov    rax,QWORD PTR [rbp-0x10]
+  40076b:	mov    QWORD PTR [rax+0x8],rdx
+  40076f:	mov    rax,QWORD PTR [rbp-0x10]
+  400773:	mov    QWORD PTR [rax+0x10],0x0
+  40077a:
+  40077b:	mov    rax,QWORD PTR [rbp-0x8]
+  40077f:	mov    rax,QWORD PTR [rax]
+  400782:	mov    rdx,QWORD PTR [rbp-0x10]
+  400786:	mov    QWORD PTR [rax+0x10],rdx
+  40078a:	mov    rax,QWORD PTR [rbp-0x8]
+  40078e:	mov    rdx,QWORD PTR [rbp-0x10]
+  400792:	mov    QWORD PTR [rax],rdx
+  400795:	pop    rbp
+  400796:	ret    
+
+0000000000400797 <addLastElement>:
+  400797:	push   rbp
+  400798:	mov    rbp,rsp
+  40079b:	sub    rsp,0x10
+  40079f:	mov    QWORD PTR [rbp-0x8],rdi
+  4007a3:	mov    QWORD PTR [rbp-0x10],rsi
+  4007a7:	cmp    QWORD PTR [rbp-0x8],0x0
+  4007ac:	jne    4007b0 <addLastElement+0x19>
+  4007ae:	jmp    400809 <addLastElement+0x72>
+  4007b0:	mov    rax,QWORD PTR [rbp-0x8]
+  4007b4:	mov    rax,QWORD PTR [rax]
+  4007b7:	test   rax,rax
+  4007ba:	jne    4007d1 <addLastElement+0x3a>
+  4007bc:	mov    rdx,QWORD PTR [rbp-0x10]
+  4007c0:	mov    rax,QWORD PTR [rbp-0x8]
+  4007c4:	mov    rsi,rdx
+  4007c7:	mov    rdi,rax
+  4007ca:	call   40070e <addFirstElement>
+  4007cf:	jmp    400809 <addLastElement+0x72>
+  4007d1:	mov    rax,QWORD PTR [rbp-0x8]
+  4007d5:	mov    rdx,QWORD PTR [rax+0x8]
+  4007d9:	mov    rax,QWORD PTR [rbp-0x10]
+  4007dd:	mov    QWORD PTR [rax+0x10],rdx
+  4007e1:	mov    rax,QWORD PTR [rbp-0x10]
+  4007e5:	mov    QWORD PTR [rax+0x8],0x0
+  4007ec:
+  4007ed:	mov    rax,QWORD PTR [rbp-0x8]
+  4007f1:	mov    rax,QWORD PTR [rax+0x8]
+  4007f5:	mov    rdx,QWORD PTR [rbp-0x10]
+  4007f9:	mov    QWORD PTR [rax+0x8],rdx
+  4007fd:	mov    rax,QWORD PTR [rbp-0x8]
+  400801:	mov    rdx,QWORD PTR [rbp-0x10]
+  400805:	mov    QWORD PTR [rax+0x8],rdx
+  400809:	leave  
+  40080a:	ret    
+
+000000000040080b <addFirstValue>:
+  40080b:	push   rbp
+  40080c:	mov    rbp,rsp
+  40080f:	sub    rsp,0x20
+  400813:	mov    QWORD PTR [rbp-0x18],rdi
+  400817:	mov    QWORD PTR [rbp-0x20],rsi
+  40081b:	mov    edi,0x18
+  400820:	call   400550 <malloc@plt>
+  400825:	mov    QWORD PTR [rbp-0x8],rax
+  400829:	mov    rax,QWORD PTR [rbp-0x8]
+  40082d:	mov    rdx,QWORD PTR [rbp-0x20]
+  400831:	mov    QWORD PTR [rax],rdx
+  400834:	mov    rdx,QWORD PTR [rbp-0x8]
+  400838:	mov    rax,QWORD PTR [rbp-0x18]
+  40083c:	mov    rsi,rdx
+  40083f:	mov    rdi,rax
+  400842:	call   40070e <addFirstElement>
+  400847:	leave  
+  400848:	ret    
+
+0000000000400849 <addLastValue>:
+  400849:	push   rbp
+  40084a:	mov    rbp,rsp
+  40084d:	sub    rsp,0x20
+  400851:	mov    QWORD PTR [rbp-0x18],rdi
+  400855:	mov    QWORD PTR [rbp-0x20],rsi
+  400859:	mov    edi,0x18
+  40085e:	call   400550 <malloc@plt>
+  400863:	mov    QWORD PTR [rbp-0x8],rax
+  400867:	mov    rax,QWORD PTR [rbp-0x8]
+  40086b:	mov    rdx,QWORD PTR [rbp-0x20]
+  40086f:	mov    QWORD PTR [rax],rdx
+  400872:	mov    rdx,QWORD PTR [rbp-0x8]
+  400876:	mov    rax,QWORD PTR [rbp-0x18]
+  40087a:	mov    rsi,rdx
+  40087d:	mov    rdi,rax
+  400880:	call   400797 <addLastElement>
+  400885:	leave  
+  400886:	ret    
+
+0000000000400887 <deleteValue>:
+  400887:	push   rbp
+  400888:	mov    rbp,rsp
+  40088b:	sub    rsp,0x30
+  40088f:	mov    QWORD PTR [rbp-0x18],rdi
+  400893:	mov    QWORD PTR [rbp-0x20],rsi
+  400897:	mov    QWORD PTR [rbp-0x28],rdx
+  40089b:	cmp    QWORD PTR [rbp-0x18],0x0
+  4008a0:	jne    4008ac <deleteValue+0x25>
+  4008a2:	mov    eax,0x0
+  4008a7:	jmp    4009c5 <deleteValue+0x13e>
+  4008ac:	mov    rax,QWORD PTR [rbp-0x18]
+  4008b0:	mov    rax,QWORD PTR [rax]
+  4008b3:	mov    QWORD PTR [rbp-0x8],rax
+  4008b7:	jmp    4009b5 <deleteValue+0x12e>
+  4008bc:	mov    rax,QWORD PTR [rbp-0x8]
+  4008c0:	mov    rdx,QWORD PTR [rax]
+  4008c3:	mov    rcx,QWORD PTR [rbp-0x20]
+  4008c7:	mov    rax,QWORD PTR [rbp-0x28]
+  4008cb:	mov    rsi,rcx
+  4008ce:	mov    rdi,rdx
+  4008d1:	call   rax
+  4008d3:	test   eax,eax
+  4008d5:	jne    4009a9 <deleteValue+0x122>
+  4008db:	mov    rax,QWORD PTR [rbp-0x8]
+  4008df:	mov    rax,QWORD PTR [rax+0x8]
+  4008e3:	test   rax,rax
+  4008e6:	jne    400911 <deleteValue+0x8a>
+  4008e8:	mov    rax,QWORD PTR [rbp-0x8]
+  4008ec:	mov    rax,QWORD PTR [rax+0x10]
+  4008f0:	test   rax,rax
+  4008f3:	jne    400911 <deleteValue+0x8a>
+  4008f5:	mov    rax,QWORD PTR [rbp-0x18]
+  4008f9:	mov    QWORD PTR [rax],0x0
+  400900:	mov    rax,QWORD PTR [rbp-0x18]
+  400904:	mov    QWORD PTR [rax+0x8],0x0
+  40090b:
+  40090c:	jmp    400996 <deleteValue+0x10f>
+  400911:	mov    rax,QWORD PTR [rbp-0x8]
+  400915:	mov    rax,QWORD PTR [rax+0x8]
+  400919:	test   rax,rax
+  40091c:	jne    400940 <deleteValue+0xb9>
+  40091e:	mov    rax,QWORD PTR [rbp-0x8]
+  400922:	mov    rax,QWORD PTR [rax+0x10]
+  400926:	mov    QWORD PTR [rax+0x8],0x0
+  40092d:
+  40092e:	mov    rax,QWORD PTR [rbp-0x8]
+  400932:	mov    rdx,QWORD PTR [rax+0x10]
+  400936:	mov    rax,QWORD PTR [rbp-0x18]
+  40093a:	mov    QWORD PTR [rax+0x8],rdx
+  40093e:	jmp    400996 <deleteValue+0x10f>
+  400940:	mov    rax,QWORD PTR [rbp-0x8]
+  400944:	mov    rax,QWORD PTR [rax+0x10]
+  400948:	test   rax,rax
+  40094b:	jne    40096e <deleteValue+0xe7>
+  40094d:	mov    rax,QWORD PTR [rbp-0x8]
+  400951:	mov    rax,QWORD PTR [rax+0x8]
+  400955:	mov    QWORD PTR [rax+0x10],0x0
+  40095c:
+  40095d:	mov    rax,QWORD PTR [rbp-0x8]
+  400961:	mov    rdx,QWORD PTR [rax+0x8]
+  400965:	mov    rax,QWORD PTR [rbp-0x18]
+  400969:	mov    QWORD PTR [rax],rdx
+  40096c:	jmp    400996 <deleteValue+0x10f>
+  40096e:	mov    rax,QWORD PTR [rbp-0x8]
+  400972:	mov    rax,QWORD PTR [rax+0x8]
+  400976:	mov    rdx,QWORD PTR [rbp-0x8]
+  40097a:	mov    rdx,QWORD PTR [rdx+0x10]
+  40097e:	mov    QWORD PTR [rax+0x10],rdx
+  400982:	mov    rax,QWORD PTR [rbp-0x8]
+  400986:	mov    rax,QWORD PTR [rax+0x10]
+  40098a:	mov    rdx,QWORD PTR [rbp-0x8]
+  40098e:	mov    rdx,QWORD PTR [rdx+0x8]
+  400992:	mov    QWORD PTR [rax+0x8],rdx
+  400996:	mov    rax,QWORD PTR [rbp-0x8]
+  40099a:	mov    rdi,rax
+  40099d:	call   4004f0 <free@plt>
+  4009a2:	mov    eax,0x1
+  4009a7:	jmp    4009c5 <deleteValue+0x13e>
+  4009a9:	mov    rax,QWORD PTR [rbp-0x8]
+  4009ad:	mov    rax,QWORD PTR [rax+0x8]
+  4009b1:	mov    QWORD PTR [rbp-0x8],rax
+  4009b5:	cmp    QWORD PTR [rbp-0x8],0x0
+  4009ba:	jne    4008bc <deleteValue+0x35>
+  4009c0:	mov    eax,0x0
+  4009c5:	leave  
+  4009c6:	ret    
+
+00000000004009c7 <printList>:
+  4009c7:	push   rbp
+  4009c8:	mov    rbp,rsp
+  4009cb:	sub    rsp,0x20
+  4009cf:	mov    QWORD PTR [rbp-0x18],rdi
+  4009d3:	mov    QWORD PTR [rbp-0x20],rsi
+  4009d7:	cmp    QWORD PTR [rbp-0x18],0x0
+  4009dc:	jne    4009e0 <printList+0x19>
+  4009de:	jmp    400a3a <printList+0x73>
+  4009e0:	mov    rax,QWORD PTR [rbp-0x18]
+  4009e4:	mov    rax,QWORD PTR [rax]
+  4009e7:	mov    QWORD PTR [rbp-0x8],rax
+  4009eb:	mov    edi,0x5b
+  4009f0:	call   400500 <putchar@plt>
+  4009f5:	jmp    400a29 <printList+0x62>
+  4009f7:	mov    rax,QWORD PTR [rbp-0x8]
+  4009fb:	mov    rdx,QWORD PTR [rax]
+  4009fe:	mov    rax,QWORD PTR [rbp-0x20]
+  400a02:	mov    rdi,rdx
+  400a05:	call   rax
+  400a07:	mov    rax,QWORD PTR [rbp-0x8]
+  400a0b:	mov    rax,QWORD PTR [rax+0x8]
+  400a0f:	mov    QWORD PTR [rbp-0x8],rax
+  400a13:	cmp    QWORD PTR [rbp-0x8],0x0
+  400a18:	je     400a29 <printList+0x62>
+  400a1a:	mov    edi,0x400c84
+  400a1f:	mov    eax,0x0
+  400a24:	call   400520 <printf@plt>
+  400a29:	cmp    QWORD PTR [rbp-0x8],0x0
+  400a2e:	jne    4009f7 <printList+0x30>
+  400a30:	mov    edi,0x400c88
+  400a35:	call   400510 <puts@plt>
+  400a3a:	leave  
+  400a3b:	ret    
+
+0000000000400a3c <cmpInt>:
+  400a3c:	push   rbp
+  400a3d:	mov    rbp,rsp
+  400a40:	mov    QWORD PTR [rbp-0x8],rdi
+  400a44:	mov    QWORD PTR [rbp-0x10],rsi
+  400a48:	mov    rax,QWORD PTR [rbp-0x8]
+  400a4c:	mov    edx,DWORD PTR [rax]
+  400a4e:	mov    rax,QWORD PTR [rbp-0x10]
+  400a52:	mov    eax,DWORD PTR [rax]
+  400a54:	sub    edx,eax
+  400a56:	mov    eax,edx
+  400a58:	pop    rbp
+  400a59:	ret    
+
+0000000000400a5a <printInt>:
+  400a5a:	push   rbp
+  400a5b:	mov    rbp,rsp
+  400a5e:	sub    rsp,0x10
+  400a62:	mov    QWORD PTR [rbp-0x8],rdi
+  400a66:	mov    rax,QWORD PTR [rbp-0x8]
+  400a6a:	mov    eax,DWORD PTR [rax]
+  400a6c:	mov    esi,eax
+  400a6e:	mov    edi,0x400c8a
+  400a73:	mov    eax,0x0
+  400a78:	call   400520 <printf@plt>
+  400a7d:	leave  
+  400a7e:	ret    
+
+0000000000400a7f <main>:
+  400a7f:	push   rbp
+  400a80:	mov    rbp,rsp
+  400a83:	sub    rsp,0x30
+  400a87:	mov    DWORD PTR [rbp-0x24],edi
+  400a8a:	mov    QWORD PTR [rbp-0x30],rsi
+  400a8e:	cmp    DWORD PTR [rbp-0x24],0x1
+  400a92:	jg     400ab7 <main+0x38>
+  400a94:	mov    rax,QWORD PTR [rbp-0x30]
+  400a98:	mov    rax,QWORD PTR [rax]
+  400a9b:	mov    rsi,rax
+  400a9e:	mov    edi,0x400c8d
+  400aa3:	mov    eax,0x0
+  400aa8:	call   400520 <printf@plt>
+  400aad:	mov    eax,0x1
+  400ab2:	jmp    400bf4 <main+0x175>
+  400ab7:	mov    rax,QWORD PTR [rbp-0x30]
+  400abb:	add    rax,0x8
+  400abf:	mov    rax,QWORD PTR [rax]
+  400ac2:	mov    rdi,rax
+  400ac5:	call   400560 <atoi@plt>
+  400aca:	mov    DWORD PTR [rbp-0x4],eax
+  400acd:	mov    eax,0x0
+  400ad2:	call   40065d <emptyList>
+  400ad7:	mov    QWORD PTR [rbp-0x20],rax
+  400adb:	mov    eax,DWORD PTR [rbp-0x4]
+  400ade:	cdqe   
+  400ae0:	shl    rax,0x2
+  400ae4:	mov    rdi,rax
+  400ae7:	call   400550 <malloc@plt>
+  400aec:	mov    QWORD PTR [rbp-0x10],rax
+  400af0:	mov    DWORD PTR [rbp-0x14],0x0
+  400af7:	jmp    400b1e <main+0x9f>
+  400af9:	mov    eax,DWORD PTR [rbp-0x14]
+  400afc:	cdqe   
+  400afe:	lea    rdx,[rax*4+0x0]
+  400b05:
+  400b06:	mov    rax,QWORD PTR [rbp-0x10]
+  400b0a:	add    rax,rdx
+  400b0d:	mov    edx,DWORD PTR [rbp-0x14]
+  400b10:	add    edx,0x1
+  400b13:	mov    DWORD PTR [rax],edx
+  400b15:	mov    eax,DWORD PTR [rbp-0x14]
+  400b18:	add    eax,0x1
+  400b1b:	mov    DWORD PTR [rbp-0x14],eax
+  400b1e:	mov    eax,DWORD PTR [rbp-0x14]
+  400b21:	cmp    eax,DWORD PTR [rbp-0x4]
+  400b24:	jl     400af9 <main+0x7a>
+  400b26:	mov    rax,QWORD PTR [rbp-0x20]
+  400b2a:	mov    esi,0x400a5a
+  400b2f:	mov    rdi,rax
+  400b32:	call   4009c7 <printList>
+  400b37:	mov    DWORD PTR [rbp-0x14],0x0
+  400b3e:	jmp    400b7d <main+0xfe>
+  400b40:	mov    eax,DWORD PTR [rbp-0x14]
+  400b43:	cdqe   
+  400b45:	lea    rdx,[rax*4+0x0]
+  400b4c:
+  400b4d:	mov    rax,QWORD PTR [rbp-0x10]
+  400b51:	add    rdx,rax
+  400b54:	mov    rax,QWORD PTR [rbp-0x20]
+  400b58:	mov    rsi,rdx
+  400b5b:	mov    rdi,rax
+  400b5e:	call   400849 <addLastValue>
+  400b63:	mov    rax,QWORD PTR [rbp-0x20]
+  400b67:	mov    esi,0x400a5a
+  400b6c:	mov    rdi,rax
+  400b6f:	call   4009c7 <printList>
+  400b74:	mov    eax,DWORD PTR [rbp-0x14]
+  400b77:	add    eax,0x1
+  400b7a:	mov    DWORD PTR [rbp-0x14],eax
+  400b7d:	mov    eax,DWORD PTR [rbp-0x14]
+  400b80:	cmp    eax,DWORD PTR [rbp-0x4]
+  400b83:	jl     400b40 <main+0xc1>
+  400b85:	mov    rax,QWORD PTR [rbp-0x20]
+  400b89:	mov    esi,0x400a5a
+  400b8e:	mov    rdi,rax
+  400b91:	call   4009c7 <printList>
+  400b96:	mov    eax,DWORD PTR [rbp-0x4]
+  400b99:	mov    DWORD PTR [rbp-0x14],eax
+  400b9c:	jmp    400bd0 <main+0x151>
+  400b9e:	mov    rax,QWORD PTR [rbp-0x20]
+  400ba2:	lea    rcx,[rbp-0x14]
+  400ba6:	mov    edx,0x400a3c
+  400bab:	mov    rsi,rcx
+  400bae:	mov    rdi,rax
+  400bb1:	call   400887 <deleteValue>
+  400bb6:	mov    rax,QWORD PTR [rbp-0x20]
+  400bba:	mov    esi,0x400a5a
+  400bbf:	mov    rdi,rax
+  400bc2:	call   4009c7 <printList>
+  400bc7:	mov    eax,DWORD PTR [rbp-0x14]
+  400bca:	sub    eax,0x1
+  400bcd:	mov    DWORD PTR [rbp-0x14],eax
+  400bd0:	mov    eax,DWORD PTR [rbp-0x14]
+  400bd3:	test   eax,eax
+  400bd5:	jg     400b9e <main+0x11f>
+  400bd7:	mov    rax,QWORD PTR [rbp-0x10]
+  400bdb:	mov    rdi,rax
+  400bde:	call   4004f0 <free@plt>
+  400be3:	lea    rax,[rbp-0x20]
+  400be7:	mov    rdi,rax
+  400bea:	call   400690 <deleteList>
+  400bef:	mov    eax,0x0
+  400bf4:	leave  
+  400bf5:	ret    
+  400bf6:	nop    WORD PTR cs:[rax+rax*1+0x0]
+  400bfd:

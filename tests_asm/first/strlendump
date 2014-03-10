@@ -1,0 +1,59 @@
+00000000004004fd <mystrlen>:
+  4004fd:	push   rbp
+  4004fe:	mov    rbp,rsp
+  400501:	mov    QWORD PTR [rbp-0x18],rdi ; s
+  400505:	mov    rax,QWORD PTR [rbp-0x18]
+  400509:	mov    QWORD PTR [rbp-0x8],rax  ; t = s
+  40050d:	nop
+  40050e:	mov    rax,QWORD PTR [rbp-0x8]
+  400512:	lea    rdx,[rax+0x1]
+  400516:	mov    QWORD PTR [rbp-0x8],rdx  ; t++
+  40051a:	movzx  eax,BYTE PTR [rax]
+  40051d:	test   al,al
+  40051f:	jne    40050e <mystrlen+0x11>
+  400521:	mov    rdx,QWORD PTR [rbp-0x8]
+  400525:	mov    rax,QWORD PTR [rbp-0x18]
+  400529:	sub    rdx,rax
+  40052c:	mov    rax,rdx
+  40052f:	sub    eax,0x1
+  400532:	pop    rbp
+  400533:	ret    
+
+0000000000400534 <main>:
+  400534:	push   rbp
+  400535:	mov    rbp,rsp
+  400538:	sub    rsp,0x20
+  40053c:	mov    DWORD PTR [rbp-0x14],edi  ; argc
+  40053f:	mov    QWORD PTR [rbp-0x20],rsi  ; argv
+  400543:	mov    DWORD PTR [rbp-0x4],0x1   ; i
+  40054a:	jmp    40059a <main+0x66>
+  40054c:	mov    eax,DWORD PTR [rbp-0x4]
+  40054f:	cdqe   
+  400551:	lea    rdx,[rax*8+0x0]
+  400558:
+  400559:	mov    rax,QWORD PTR [rbp-0x20]
+  40055d:	add    rax,rdx
+  400560:	mov    rax,QWORD PTR [rax]
+  400563:	mov    rdi,rax
+  400566:	call   4004fd <mystrlen>
+  40056b:	mov    edx,eax
+  40056d:	mov    eax,DWORD PTR [rbp-0x4]
+  400570:	cdqe   
+  400572:	lea    rcx,[rax*8+0x0]
+  400579:
+  40057a:	mov    rax,QWORD PTR [rbp-0x20]
+  40057e:	add    rax,rcx
+  400581:	mov    rax,QWORD PTR [rax]
+  400584:	mov    rsi,rax
+  400587:	mov    edi,0x400634
+  40058c:	mov    eax,0x0
+  400591:	call   4003e0 <printf@plt>
+  400596:	add    DWORD PTR [rbp-0x4],0x1
+  40059a:	mov    eax,DWORD PTR [rbp-0x4]
+  40059d:	cmp    eax,DWORD PTR [rbp-0x14]
+  4005a0:	jl     40054c <main+0x18>
+  4005a2:	mov    eax,0x0
+  4005a7:	leave  
+  4005a8:	ret    
+  4005a9:	nop    DWORD PTR [rax+0x0]
+
