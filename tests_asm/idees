@@ -17,6 +17,9 @@ Existe-t-il d'autres cas où un pointeur est un opérande d'un opérateur
 bit à bit ?
 
 
+Créer des classes d'équivalence pour les règles de typage (se souvenir
+de la règle qui a permis de trouver un type, pour pouvoir choisir quel type
+en découle, le modifier plus tard.
 
 
 

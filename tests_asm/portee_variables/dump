@@ -1,0 +1,38 @@
+
+portee_variables.o:     format de fichier elf64-x86-64
+
+
+Déassemblage de la section .text:
+
+0000000000000000 <fonction>:
+   0:	push   rbp
+   1:	mov    rbp,rsp
+   4:	sub    rsp,0x20
+   8:	mov    DWORD PTR [rbp-0x14],edi
+   b:	mov    eax,esi
+   d:	mov    BYTE PTR [rbp-0x18],al
+  10:	mov    eax,DWORD PTR [rip+0x0]        # 16 <fonction+0x16>
+  16:	test   eax,eax
+  18:	jne    23 <fonction+0x23>
+  1a:	mov    DWORD PTR [rbp-0x4],0x1
+  21:	jmp    2a <fonction+0x2a>
+  23:	mov    DWORD PTR [rbp-0x4],0x0
+  2a:	mov    eax,DWORD PTR [rip+0x0]        # 30 <fonction+0x30>
+  30:	add    eax,0x1
+  33:	mov    DWORD PTR [rip+0x0],eax        # 39 <fonction+0x39>
+  39:	cmp    DWORD PTR [rbp-0x4],0x1
+  3d:	jne    4b <fonction+0x4b>
+  3f:	mov    edi,0x0
+  44:	call   49 <fonction+0x49>
+  49:	jmp    6b <fonction+0x6b>
+  4b:	mov    eax,DWORD PTR [rip+0x0]        # 51 <fonction+0x51>
+  51:	sub    eax,0x1
+  54:	mov    DWORD PTR [rbp-0x8],eax
+  57:	mov    eax,DWORD PTR [rbp-0x8]
+  5a:	mov    esi,eax
+  5c:	mov    edi,0x0
+  61:	mov    eax,0x0
+  66:	call   6b <fonction+0x6b>
+  6b:	mov    eax,DWORD PTR [rip+0x0]        # 71 <fonction+0x71>
+  71:	leave  
+  72:	ret    

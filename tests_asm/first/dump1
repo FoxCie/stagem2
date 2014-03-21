@@ -2,9 +2,9 @@
   40054d:	push   rbp
   40054e:	mov    rbp,rsp
   400551:	sub    rsp,0x20
-  400555:	mov    DWORD PTR [rbp-0x14],edi
-  400558:	mov    QWORD PTR [rbp-0x20],rsi
-  40055c:	mov    DWORD PTR [rbp-0x4],0x1
+  400555:	mov    DWORD PTR [rbp-0x14],edi ; argc
+  400558:	mov    QWORD PTR [rbp-0x20],rsi ; argv
+  40055c:	mov    DWORD PTR [rbp-0x4],0x1  ; i
   400563:	jmp    400592 <main+0x45>
   400565:	mov    eax,DWORD PTR [rbp-0x4]
   400568:	cdqe   
@@ -12,7 +12,7 @@
   400571:
   400572:	mov    rax,QWORD PTR [rbp-0x20]
   400576:	add    rax,rdx
-  400579:	mov    rax,QWORD PTR [rax]
+  400579:	mov    rax,QWORD PTR [rax]     ; argv[i]
   40057c:	mov    rsi,rax
   40057f:	mov    edi,0x400654
   400584:	mov    eax,0x0

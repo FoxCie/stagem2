@@ -1,0 +1,154 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[french]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\title{Rapport 6 semaines PFE}
+\author{Matthieu Renard}
+
+\begin{document}
+
+\maketitle{} 
+
+\vspace{15em}
+
+\tableofcontents{}
+
+\newpage{}
+
+\section{Le LaBRI}
+
+Le LaBRI (Laboratoire Bordelais de Recherche Informatique) est un laboratoire
+dépendant de l'université de Bordeaux, situé sur le campus de l'ancienne
+université de Bordeaux 1. Le laboratoire est divisé en six équipes, chacune
+travaillant sur des aspects différents de l'informatique :
+\begin{itemize}
+\item méthodes formelles ;
+\item combinatoire et algorithmique ;
+\item image et son ;
+\item modèles et algorithmes pour la bioinformatique et la visualisation
+      d'informations ;
+\item programmation, réseaux et systèmes ;
+\item supports et algorithmes pour les applications.
+\end{itemize}
+Le LaBRI regroupe des chercheurs, des doctorants ainsi que des enseignants
+chercheurs, qui enseignent à l'université ainsi que dans certaines écoles
+de l'IPB (Institut Polytechnique de Bordeaux, qui devrait changer de nom
+sous peu). L'équipe Méthodes Formelles à laquelle j'appartiens est
+composée d'un peu plus d'une cinquantaine de personnes dont le but est
+de faire évoluer l'informatique dans des sujets allant de la reconnaissance
+du langage à la vérification de programmes en passant par l'étude des
+graphes et de la logique. 
+
+
+\section{Nature du travail}
+
+Le travail à effectuer est avant tout un travail de recherche. Il s'agit
+donc tout d'abord de s'informer sur l'état de l'art dans le domaine étudié,
+afin de connaître l'avancée des recherches effectuées, puis de tenter 
+d'en améliorer un ou plusieurs aspects. Si le temps le permet, il est 
+également possible d'intégrer une part d'implémentation qui permettrait
+entre autres d'évaluer le travail réalisé, en le comparant par exemple à
+ce qui existait déjà.
+
+\section{Environnement de travail}
+
+Du fait de la nature du travail (essentiellement de la recherche), 
+l'environnement de travail n'est pas prédéfini, il est donc possible
+d'utiliser toutes les technologies souhaitées afin de mener à bien le
+projet. Une salle au CREMI, un bâtiment de l'université, est dédiée aux
+stagiaires de master recherche et dispose de machines en libre accès avec
+une distribution Debian disposant d'un très grand nombre d'outils installés.
+Il est également possible d'utiliser Windows sur des machines virtuelles 
+installées sur ces ordinateurs, ou bien dans d'autres salles du CREMI.
+
+
+\section{Sujet de stage}
+
+Le stage porte sur la recherche de variables dans un programme binaire.
+S'il est aisé de récupérer du code assembleur à partir d'un programme
+binaire en connaissant l'architecture sur laquelle il s'exécute, la lecture
+du code assembleur est fastidieuse, il est donc intéressant de l'étudier
+de manière automatique, en tentant par exemple de le transformer en un
+code de plus haut niveau équivalent, qui sera plus facilement compréhensible
+par un être humain. \\
+\indent{}Afin de mieux analyser le code assembleur, il est
+intéressant de déterminer la position des variables, ainsi que leurs types.
+Le type d'une variable peut être par exemple un type primitif : un entier
+encodé sur un certain nombre de bits, ou un caractère (qui peut être
+représenté par un entier), ou encore un type plus complexe comme une
+structure (ensemble de variables), ou une union (variable dont le type peut
+varier en fonction du temps). \\
+\indent{}La rétroingénierie des programmes binaires a
+plusieurs applications : tout d'abord cela permet de pouvoir adapter des
+programmes propriétaires pour des systèmes "libres", mais aussi de
+s'assurer que ces programmes ne contiennent aucun code malicieux ; cela permet
+aussi de comprendre le fonctionnement d'un code malicieux afin de pouvoir
+réparer les machines infectées ou le détecter avant qu'il n'infecte une
+machine. Si certains programmes binaires contiennent des informations en
+plus du code assembleur, comme le nom des variables ou leurs types, il
+est impossible de garantir la validité de ces informations (s'il s'agit
+de code malicieux, ces informations sont probablement manquantes ou 
+corrompues), et une recherche de ces informations sur leur seule utilisation
+a donc un réel intérêt.
+
+
+\section{Les étapes nécessaires pour réaliser ce travail}
+
+Afin de réaliser ce travail, il est nécessaire de se documenter sur ce qui
+existe déjà dans le domaine de la recherche de types et plus généralement
+dans la rétroingénierie de programmes binaires. Une fois cela réalisé,
+il faut chercher un moyen d'améliorer ce qui existe, par exemple en
+utilisant des structures de données plus adaptées, ou encore par
+l'utilisation d'algorithmes et heuristiques ingénieux. Si le temps le permet,
+une implémentation est envisageable, dans le programme \textit{insight} par 
+exemple, développé par l'équipe de Méthodes Formelles du LaBRI, qui est
+un logiciel distribué sous license BSD qui permet l'analyse statique de
+programmes binaires. Ce logiciel est actuellement en cours de développement
+et permet, entre autres, de récupérer le graphe de flot de contrôle
+(Control Flow Graph, CFG) d'un programme. Il utilise une abstraction du code
+assembleur, appelée "microcode" et qui est beaucoup plus verbeuse que
+l'assembleur, puisqu'elle décompose tous les effets de bord d'une instruction
+(mise à jour des drapeaux (flags) du processeur, etc...). L'analyse
+devrait donc s'effectuer sur ce microcode, ce qui peut rendre la tâche
+plus difficile ou la simplifier. 
+
+
+\section{Avancement actuel}
+
+Après avoir lu des articles abordant le problème sur différents niveaux,
+de l'analyse s'intéressant seulement au typage de variables déjà connues
+grâce à des équations sur les variables en forme SSA (Single Static 
+Assigment), qui consiste à dupliquer les variables chaque fois qu'elles
+sont modifiées, afin de garder une trace de chacune des valeurs qu'elle
+prend, à la reconnaissance des variables dans le code assembleur, avec
+distinction des structures et des tableaux, la "lecture" de code assembleur
+a permis de se familiariser davantage avec ce langage, ses conventions,
+et d'essayer de repérer des schémas, qui indiqueraient un même type 
+de données par exemple. Cependant, ces schémas ne sont valables que lorsque
+le code est généré par un même compilateur ; le but ici étant de tenter
+d'analyser un code assembleur potentiellement malicieux et donc modifié
+par un humain, il est impossible de présumer que de tels schémas sont
+valables pour en déduire des informations certaines. Extraire des
+informations certaines de code assembleur ne semble pas chose aisée, et il
+serait intéressant de tenter d'en lister un maximum, afin de les utiliser
+et de les compléter avec l'aide d'heuristiques. Une évaluation de la
+difficulté apportée par le microcode par rapport à l'assembleur et 
+l'intégration d'une analyse de type dans le logiciel \textit{insight} est
+également à prévoir.
+
+\section{Conclusion}
+
+Si les premières semaines passées à lire des articles pour tenter
+d'en extraire des informations intéressantes furent quelque peu 
+laborieuses, elles ont néanmoins permis d'aborder le sujet sous différents
+angles qui me seront utiles pour la suite. Si l'implémentation n'est pas
+une obligation, elle me semble intéressante car elle permettrait de mettre
+en oeuvre les résultats que je pourrais trouver et ainsi valider ou infirmer
+ceux-ci. 
+
+\end{document}
+
+
+
