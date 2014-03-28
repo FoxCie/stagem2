@@ -1,0 +1,30 @@
+
+regle1.o:     format de fichier elf64-x86-64
+
+
+Déassemblage de la section .text:
+
+0000000000000000 <init_struct>:
+   0:	push   rbp
+   1:	mov    rbp,rsp
+   4:	mov    QWORD PTR [rbp-0x8],rdi
+   8:	mov    rax,QWORD PTR [rbp-0x8]
+   c:	mov    DWORD PTR [rax],0x0
+  12:	mov    rax,QWORD PTR [rbp-0x8]
+  16:	mov    QWORD PTR [rax+0x8],0x0
+  1d:
+  1e:	pop    rbp
+  1f:	ret    
+
+0000000000000020 <main>:
+  20:	push   rbp
+  21:	mov    rbp,rsp
+  24:	sub    rsp,0x20
+  28:	mov    DWORD PTR [rbp-0x14],edi
+  2b:	mov    QWORD PTR [rbp-0x20],rsi
+  2f:	lea    rax,[rbp-0x10]
+  33:	mov    rdi,rax
+  36:	call   3b <main+0x1b>
+  3b:	mov    eax,0x0
+  40:	leave  
+  41:	ret    

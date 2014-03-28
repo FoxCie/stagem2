@@ -1,0 +1,49 @@
+
+regle6.o:     format de fichier elf32-i386
+
+
+Déassemblage de la section .text:
+
+00000000 <g>:
+   0:	push   ebp
+   1:	mov    ebp,esp
+   3:	mov    eax,DWORD PTR [ebp+0x8]
+   6:	mov    DWORD PTR [eax],0x0
+   c:	mov    eax,DWORD PTR [ebp+0x8]
+   f:	mov    DWORD PTR [eax+0x4],0x0
+  16:	pop    ebp
+  17:	ret    
+
+00000018 <f>:
+  18:	push   ebp
+  19:	mov    ebp,esp
+  1b:	sub    esp,0x4
+  1e:	mov    eax,DWORD PTR [ebp+0x8]
+  21:	mov    DWORD PTR [esp],eax
+  24:	call   25 <f+0xd>
+  29:	mov    eax,DWORD PTR [ebp+0x8]
+  2c:	mov    DWORD PTR [eax+0x8],0x0
+  33:	leave  
+  34:	ret    
+
+00000035 <i>:
+  35:	push   ebp
+  36:	mov    ebp,esp
+  38:	mov    eax,DWORD PTR [ebp+0x8]
+  3b:	mov    DWORD PTR [eax],0x0
+  41:	mov    eax,DWORD PTR [ebp+0x8]
+  44:	mov    DWORD PTR [eax+0x4],0x0
+  4b:	pop    ebp
+  4c:	ret    
+
+0000004d <h>:
+  4d:	push   ebp
+  4e:	mov    ebp,esp
+  50:	sub    esp,0x4
+  53:	mov    eax,DWORD PTR [ebp+0x8]
+  56:	mov    DWORD PTR [esp],eax
+  59:	call   5a <h+0xd>
+  5e:	mov    eax,DWORD PTR [ebp+0x8]
+  61:	mov    DWORD PTR [eax+0x8],0x0
+  68:	leave  
+  69:	ret    

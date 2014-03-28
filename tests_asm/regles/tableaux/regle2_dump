@@ -1,0 +1,21 @@
+
+regle2.o:     format de fichier elf32-i386
+
+
+Déassemblage de la section .text:
+
+00000000 <main>:
+   0:	push   ebp
+   1:	mov    ebp,esp
+   3:	sub    esp,0x30
+   6:	mov    DWORD PTR [ebp-0x4],0x0
+   d:	jmp    1e <main+0x1e>
+   f:	mov    eax,DWORD PTR [ebp-0x4]
+  12:	mov    DWORD PTR [ebp+eax*4-0x2c],0x0
+  19:
+  1a:	add    DWORD PTR [ebp-0x4],0x1
+  1e:	cmp    DWORD PTR [ebp-0x4],0x9
+  22:	jle    f <main+0xf>
+  24:	mov    eax,0x0
+  29:	leave  
+  2a:	ret    
