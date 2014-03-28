@@ -1,0 +1,41 @@
+def g(a, b)
+	matthieu = 10;
+	if a < b then
+		matthieu = 5;
+	end
+return matthieu;
+end
+
+class A
+def f(a, b)
+matthieu = a + b
+return matthieu;
+end
+
+def g(a, b)
+filou = a * b;
+return filou;
+end
+end
+class B
+def f(a, b)
+matthieu = a - b;
+return matthieu;
+end
+end
+
+
+j = g(3.5, 5);
+
+obj = A.new();
+h = g(7, 6);
+i = obj.f(3, h);
+
+
+PRINT "j = "
+PRINT j
+PRINT "i = "
+PRINT i
+PRINT "3 > 4 ? "
+PRINT (3 < 4)
+

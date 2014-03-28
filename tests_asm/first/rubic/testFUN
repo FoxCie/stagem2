@@ -1,0 +1,15 @@
+def f(a,b)
+	c = a + b;
+	return c;
+end
+
+a = f(1, 2);
+
+b = f(1.5, 2.5);
+
+PRINT "f : (a, b) --> a + b\0A"
+PRINT "f(1, 2) = "
+PRINT a
+PRINT "f(1.5, 2.5) = "
+PRINT b
+

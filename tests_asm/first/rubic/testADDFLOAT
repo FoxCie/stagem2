@@ -1,0 +1,13 @@
+y = 3.4;
+x = 2.1;
+
+PRINT "y = 3.4 ; x = 2.1\0A"
+
+z = x + y;
+
+w = x - y;
+
+PRINT "x + y = "
+PRINT z
+PRINT "x - y = "
+PRINT w

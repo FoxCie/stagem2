@@ -1,0 +1,12 @@
+PRINT " y =  "
+y = 10;
+PRINT y
+PRINT " x = "
+x = 3;
+PRINT x
+PRINT " z = x + y = "
+z = x + y;
+PRINT z
+PRINT "w = x - y = "
+w = x - y;
+PRINT w

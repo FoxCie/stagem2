@@ -1,0 +1,36 @@
+def g(a, b)
+matthieu = a + b;
+matthieu;
+return matthieu;
+end
+
+class A
+def f(a, b)
+matthieu = a + b;
+return matthieu;
+end
+
+def g(a, b)
+filou = a * b;
+return filou;
+end
+end
+class B
+def f(a, b)
+matthieu = a - b;
+return matthieu;
+end
+end
+
+
+j = g(3.5, 5);
+j;
+
+obj = A.new();
+i = obj.f(3, 5);
+i;
+
+f;
+g;
+matthieu;
+
