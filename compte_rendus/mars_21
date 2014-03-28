@@ -1,0 +1,13 @@
+Trouver un jeu de données intéressant, sur lequel l'application d'un
+algorithme donne des informations intéressantes sur la justesse et les
+limites de l'algorithme.
+
+
+Ccured = C avec vérification statique ou dynamique des types donnés par 
+des annotations du code
+
+Shape analysis : déterminer par exemple qu'une liste est chaînée en bouclant
+sur le début et la fin, etc... Un bon exemple est de pouvoir inverser l'ordre
+des éléments de la liste.
+
+
