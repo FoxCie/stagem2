@@ -1,19 +1,13 @@
-
-regle3.o:     format de fichier elf32-i386
-
-
-Déassemblage de la section .text:
-
 00000000 <main>:
    0:	push   ebp
    1:	mov    ebp,esp
    3:	sub    esp,0x10
-   6:	mov    DWORD PTR [ebp-0xc],0x0
+   6:	mov    DWORD PTR [ebp-0xc],0x0 ; a = 0
    d:	lea    eax,[ebp-0xc]
-  10:	mov    DWORD PTR [ebp-0x4],eax
+  10:	mov    DWORD PTR [ebp-0x4],eax ; b = &a
   13:	mov    eax,DWORD PTR [ebp-0x4]
-  16:	mov    eax,DWORD PTR [eax]
-  18:	mov    DWORD PTR [ebp-0x8],eax
+  16:	mov    eax,DWORD PTR [eax] 
+  18:	mov    DWORD PTR [ebp-0x8],eax ; c = *b
   1b:	mov    eax,0x0
   20:	leave  
   21:	ret    

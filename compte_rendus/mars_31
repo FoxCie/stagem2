@@ -1,0 +1,33 @@
+Retrouver des structures dans des structures : comment distinguer une
+structure au début d'une autre structure ? 
+
+Questions : 
+
+-définition de structure : sert à représenter un lien arithmétique entre
+pointeurs.
+
+-typage dynamique/statique : si on a 
+struct T { struct S s; int c;}; struct S {int a; int *b;};
+et f(struct T *t) { init_S(&(t->s)); t->c = 0; }
+init_S(struct S *s) { s->a = 0; s->b = NULL; }
+on peut donner un type statique à s dans init_S qui est 
+struct S *, mais un type dynamique qui est struct T *, lorsque la fonction
+est appelée par f. Cela permet de distinguer struct T d'une autre structure
+struct T2 { struct S s; int *c; }; par exemple : on appelle init_S avec des
+types dynamiques différents, mais le type statique devant être le même, on
+en déduit que les deux structures ont une structure en commun.
+
+-Equivalence structurelle ou non : considère-t-on que les deux structures :
+struct Point { int x; int y; }; et struct Paire { int a; int b; }; sont 
+équivalentes ou non ? 
+ --> Gagne-t-on vraiment en disant non ? (Forcément plus fin)
+
+-Le call graph aporte-t-il vraiment de l'information ou cette information
+est-elle déjà contenue dans le CFG ? 
+
+-Doit-on considérer des fonctions ? En assembleur, il ne s'agit que d'un
+rapide changement de contexte, par exemple en x86 on empile la valeur de
+retour, puis on change les valeurs de ebp et esp. Cela ne change pas grand
+chose au niveau de l'exécution. Peut-on se passer des fonctions tout en
+garantissant la même finesse qu'en les considérant ?
+

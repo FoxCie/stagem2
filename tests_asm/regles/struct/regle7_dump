@@ -1,0 +1,33 @@
+00000000 <init_S>:
+   0:	push   ebp
+   1:	mov    ebp,esp
+   3:	mov    eax,DWORD PTR [ebp+0x8]
+   6:	mov    DWORD PTR [eax],0x0 ; s->a = 0
+   c:	mov    eax,DWORD PTR [ebp+0x8]
+   f:	mov    DWORD PTR [eax+0x4],0x0 ; s->b = 0
+  16:	pop    ebp
+  17:	ret    
+
+00000018 <init_T1>:
+  18:	push   ebp
+  19:	mov    ebp,esp
+  1b:	sub    esp,0x4
+  1e:	mov    eax,DWORD PTR [ebp+0x8]
+  21:	mov    DWORD PTR [esp],eax
+  24:	call   25 <init_T1+0xd> ; init_S(&(t->s))
+  29:	mov    eax,DWORD PTR [ebp+0x8]
+  2c:	mov    DWORD PTR [eax+0x8],0x0 ; t->c = 0
+  33:	leave  
+  34:	ret    
+
+00000035 <init_T2>:
+  35:	push   ebp
+  36:	mov    ebp,esp
+  38:	sub    esp,0x4
+  3b:	mov    eax,DWORD PTR [ebp+0x8]
+  3e:	mov    DWORD PTR [esp],eax
+  41:	call   42 <init_T2+0xd> ; init_S(&(t->s))
+  46:	mov    eax,DWORD PTR [ebp+0x8]
+  49:	mov    DWORD PTR [eax+0x8],0x0 ; t->c = NULL
+  50:	leave  
+  51:	ret    

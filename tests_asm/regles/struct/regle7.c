@@ -6,17 +6,16 @@ struct S
 	int *b;
 };
 
-struct T
+struct T1
 {
 	struct S s;
 	int c;
 };
 
-struct U
+struct T2
 {
-	int a;
-	int *b;
-	int c;
+	struct S s;
+	int *c;
 };
 
 void init_S(struct S *s)
@@ -25,22 +24,15 @@ void init_S(struct S *s)
 	s->b = NULL;
 }
 
-void init_T(struct T *t)
+void init_T1(struct T1 *t)
 {
 	init_S(&(t->s));
 	t->c = 0;
 }
 
-void init_U_ab(struct U *u)
+void init_T2(struct T2 *t)
 {
-	u->a = 0;
-	u->b = NULL;
+	init_S(&(t->s));
+	t->c = NULL;
 }
-
-void init_U(struct U *u)
-{
-	init_U_ab(u);
-	u->c = 0;
-}
-
 

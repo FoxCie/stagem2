@@ -1,0 +1,45 @@
+Equivalence structurelle totale ne semble pas adéquate car trop grossière.
+On peut se servir de types paramétrés, qui fusionneraient naturellement pour
+faire ressortir les équivalences structurelles utiles (par exemple, si on
+a un module Complexe et un module Geometrie, la structure des complexes et
+celle des points seraient équivalentes, mais il ne faudrait pas les 
+fusionner. Par contre, on peut supposer qu'on ne peut pas avoir deux 
+structures équivalentes dans un même module --> on peut diviser le code
+en modules comme cela, mais qui pourraient être plus nombreux qu'il ne
+devrait, ou bien se baser sur des heuristiques (fonctions à la suite, nom
+des fonctions) pour déterminer les modules et fusionner des structures
+équivalentes.
+
+
+Types statiques/dynamiques :
+On peut supposer qu'une fonction qui utiliserait plus de champs d'une structure
+que la fonction appelante implique que la variable de la fonction appelante a
+le même type que dans la fonction appelée. Problème : offset_of, par exemple,
+permet de récupérer une structure englobante. Solution : offset_of est
+utilisé pour simuler du polymorphisme avec de la surcharge de fonctions,
+on peut donc utiliser une forme de relation d'héritage avec surcharge des
+fonctions par un sous-type pour simuler ce type de cas.
+
+
+Comment définir une fonction ? Généralement, on considère que c'est un
+bout de code sur lequel on call puis ret, mais call et ret ne sont que
+des meta instructions, et on peut les simuler facilement avec d'autres
+instructions dépendant de l'architecture. On peut tenter de définir 
+des zones mémoire qui utilisent la mémoire de façon "autonome", 
+c'est-à-dire par exemple qui restaurent le registre de pile dans l'état dans
+lequel il était auparavant.
+
+
+S'il est difficile de se fier au découpage en fonctions, il devient
+également peu sûr de se fier au call-graph pour inférer des types. Peut-on
+se passer du call-graph ? Récupérer ses informations de manière sûre ou 
+non ?
+
+
+Idée d'algo : explorer les exécutions possibles pour typer la mémoire dans
+une exécution. On peut alors se passer complètement du call-graph en
+considérant qu'en tout point du programme (pour chaque valeur du Program
+Counter) le typage de la pile est le même par exemple. On récupère ainsi
+toutes les informations du call-graph, en risquant d'inférer des types faux
+cependant. 
+

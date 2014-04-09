@@ -1,0 +1,145 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[french]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{algorithm2e}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{multicol}
+\usepackage[margin=2cm]{geometry}
+
+
+\lstdefinestyle{customc}{
+	breaklines=true,
+	frame=none,
+	language=C,
+	basicstyle=\footnotesize\ttfamily,
+	keywordstyle=\bfseries\color{green!40!black},
+	commentstyle=\itshape\color{purple!40!black},
+	identifierstyle=\color{blue},
+	stringstyle=\color{orange},
+	numberstyle=\tiny\color{gray!40!black},
+	breakatwhitespace=true,
+}
+
+\lstdefinestyle{customasm}{
+	frame=L,
+	language=[x86masm]Assembler,
+	basicstyle=\footnotesize\ttfamily,
+	commentstyle=\itshape\color{purple!40!black},
+	breakatwhitespace=true,
+}
+
+\lstset{style=customc}
+
+\title{Détection des types dans un programme}
+\author{Matthieu Renard}
+
+\begin{document}
+\maketitle{}
+
+\newpage
+
+\section{Exemples de programmes}
+\subsection{Détection de pointeurs}
+
+On détermine qu'une variable est un pointeur s'il y a déréférencement :
+
+\begin{multicols}{2}
+\lstinputlisting[style=customc]{pointeurs/regle3.c}
+
+\columnbreak
+
+\lstinputlisting[style=customasm]{pointeurs/regle3_dump}
+\end{multicols}
+
+\newpage
+
+\subsection{Détection de tableaux}
+
+\begin{multicols}{2}
+\lstinputlisting[style=customc]{tableaux/regle2.c}
+
+\columnbreak
+
+\lstinputlisting[style=customasm]{tableaux/regle2_dump}
+\end{multicols}
+
+
+\newpage
+
+\subsection{Détection de structures}
+\subsubsection{En paramètre à une fonction}
+\begin{multicols}{2}
+\lstinputlisting[style=customc]{struct/regle1.c}
+
+\columnbreak
+
+\lstinputlisting[style=customasm]{struct/regle1_dump}
+\end{multicols}
+
+\newpage
+
+\subsubsection{Dans un tableau}
+\begin{multicols}{2}
+\lstinputlisting[style=customc]{struct/regle4.c}
+
+\columnbreak
+
+\lstinputlisting[style=customasm]{struct/regle4_dump}
+\end{multicols}
+
+\newpage
+
+\subsubsection{Détection d'une liste chainée}
+\begin{multicols}{2}
+\lstinputlisting[style=customc]{struct/regle5.c}
+
+\columnbreak
+
+\lstinputlisting[style=customasm]{struct/regle5_dump}
+\end{multicols}
+
+\newpage
+
+\subsubsection{Le problème des codes équivalents}
+\begin{multicols}{2}
+\lstinputlisting[style=customc]{struct/regle6.c}
+
+\columnbreak
+
+\lstinputlisting[style=customasm]{struct/regle6_dump}
+\end{multicols}
+
+\newpage
+
+\subsubsection{Différenciation de structures}
+\begin{multicols}{2}
+\lstinputlisting[style=customc]{struct/regle7.c}
+
+\columnbreak
+
+\lstinputlisting[style=customasm]{struct/regle7_dump}
+\end{multicols}
+
+\newpage
+
+\section{Algorithme}
+\begin{algorithm}[H]
+\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+\SetKwFor{For}{pour}{faire}{fin}
+
+\Input{Un programme binaire p}
+\Output{L'ensemble des types des variables du programme}
+\BlankLine
+
+$types \leftarrow $ tableau dont les indices sont les adresses du programme\;
+\For{Chaque execution $s$ de $p$}{
+	$types \leftarrow $ typer\_execution($s$, $types$)\;
+}
+
+\end{algorithm}
+
+\end{document}
+

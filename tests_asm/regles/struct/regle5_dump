@@ -1,14 +1,8 @@
-
-regle5.o:     format de fichier elf32-i386
-
-
-Déassemblage de la section .text:
-
 00000000 <init_list>:
    0:	push   ebp
    1:	mov    ebp,esp
-   3:	mov    eax,DWORD PTR [ebp+0x8]
+   3:	mov    eax,DWORD PTR [ebp+0x8] 
    6:	mov    edx,DWORD PTR [ebp+0x8]
-   9:	mov    DWORD PTR [eax+0x4],edx
+   9:	mov    DWORD PTR [eax+0x4],edx ; l = l->next
    c:	pop    ebp
    d:	ret    
