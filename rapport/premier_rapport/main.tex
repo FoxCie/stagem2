@@ -3,6 +3,31 @@
 \usepackage[french]{babel}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstdefinestyle{customc}{
+	breaklines=true,
+	frame=none,
+	language=C,
+	basicstyle=\footnotesize\ttfamily,
+	keywordstyle=\bfseries\color{green!40!black},
+	commentstyle=\itshape\color{purple!40!black},
+	identifierstyle=\color{blue},
+	stringstyle=\color{orange},
+	numberstyle=\tiny\color{gray!40!black},
+	breakatwhitespace=true,
+}
+
+\lstdefinestyle{customasm}{
+	frame=none,
+	language=[x86masm]Assembler,
+	basicstyle=\footnotesize\ttfamily,
+	commentstyle=\itshape\color{purple!40!black},
+	breakatwhitespace=true,
+}
+
+\lstset{style=customc}
 
 \title{Rapport 6 semaines PFE}
 \author{Matthieu Renard}
@@ -133,7 +158,87 @@ par un humain, il est impossible de présumer que de tels schémas sont
 valables pour en déduire des informations certaines. Extraire des
 informations certaines de code assembleur ne semble pas chose aisée, et il
 serait intéressant de tenter d'en lister un maximum, afin de les utiliser
-et de les compléter avec l'aide d'heuristiques. Une évaluation de la
+et de les compléter avec l'aide d'heuristiques. L'étude de code assembleur
+montre rapidement qu'il est difficile d'avoir une certitude quant aux types
+des variables en se basant uniquement sur leur utilisation. Il est possible
+de distinguer des types primitifs d'autres en fonction des instructions
+utilisées : les variables à virgule flottante disposent d'instructions
+particulières, et se différencient donc immédiatement des variables
+entières ; elles ne présentent donc que peu d'intérêt à l'étude, les
+distinguer étant trivial. Il est souvent possible de déterminer la taille
+d'une variable entière selon les opérandes utilisés (par exemple, sur une
+architecture x86, les registres ont des noms différents en fonction de leur
+taille : eax est sur 32 bits, ax sur 16 et ah sur 8). Il n'existe cependant
+pas de distinction au niveau du processeur entre un pointeur et un entier,
+la plupart des opérations arithmétiques pouvant s'effectuer sur l'un comme
+sur l'autre. À ce propos, la norme du langage C définit précisément les
+différentes opérations autorisées sur les pointeurs. Il est ainsi possible
+d'additionner un pointeur avec un entier, et de soustraire un entier à un
+pointeur en C. Le but ici est d'analyser du code assembleur qui a été
+potentiellement modifié à la main, voire intégralement écrit par un homme,
+et non produit par un compilateur. Il peut arriver, par exemple, avoir besoin
+d'assurer l'alignement d'un pointeur sur un certain nombre d'octets, ce qui
+peut être implémenté à l'aide d'un "et" logique. Si cela est illégal en C,
+il est néanmoins possible de l'effectuer, à l'aide d'un changement de type
+temporaire. C'est pourquoi, afin de distinguer entiers et pointeurs, nous
+nous sommes limités au seul déréférencement. Un second problème se pose :
+même en assembleur, certains déréférencements se font par des calculs,
+la plupart du temps entre un registre et une constante. Par exemple :
+\begin{lstlisting}[style=customasm]
+mov $0x0,-0x4(%ebp)
+mov $0x0,0x80496a0(,%eax,4)
+\end{lstlisting}
+Dans le code ci-dessus, on peut voir deux cas différents de 
+déréférencements : le premier est utilisé pour accéder à une variable
+locale, alors que le second est un accès à un élément d'un tableau 
+déclaré en tant que variable globale. Si la syntaxe utilisée ici
+permet de distinguer les deux utilisations, ce n'est pas toujours le cas,
+et sur certaines architectures, la seconde utilisation pourra avoir une
+syntaxe équivalente à la première :
+\begin{lstlisting}[style=customasm]
+mov 0x0,0x2400(eax)
+\end{lstlisting}
+On accède ici à un élément d'un tableau qui est une variable globale, la
+syntaxe étant proche de celle du processeur TI MSP430. Rien ne permet plus
+de distinguer lequel du registre ou de la constante est un pointeur. Le
+typage de ce type d'instructions ne peut donc résulter qu'en une formule
+logique indiquant que l'un est un pointeur et l'autre un entier. Dans le
+premier cas, c'est le registre \textit{ebp} qui est le pointeur, alors que
+dans les autres cas, c'est la constante qui est un pointeur, le registre
+\textit{eax} servant à parcourir le tableau. \\
+La recherche de types complexes demande une analyse différente, qui ne repose
+plus uniquement sur l'analyse des instructions. Pour repérer la présence
+d'une structure, le moyen le plus évident est de constater un accès mémoire
+sur une zone normalement inaccessible. En effet, lorsqu'on accède à un
+champ d'une structure passée en paramètre à une fonction, si ce champ n'est
+pas le premier de la structure, on accèdera à une zone mémoire qui est,
+par exemple, quatre octets après le premier champ, soit quatre octets après
+le pointeur passé en paramètre. L'accès à cette zone mémoire n'est 
+possible que grâce à une contigüité en mémoire, qui est garantie par
+l'utilisation d'une structure ou d'un tableau. Par ailleurs, la
+représentation des types complexes est plus une question de choix que
+d'une détermination objective. En effet, il est facile de produire deux
+codes assembleur similaires mais utilisant des types différents. Il n'existe
+aucune différence en assembleur entre une structure contenant trois entiers
+et une autre contenant une structure de deux entiers et un entier. 
+Cependant, le but est de rendre un code fastidieux à lire plus simple à
+comprendre, c'est pourquoi chaque choix de représentation peut avoir des
+avantages et des désavantages, mais peuvent finalement apporter des
+informations de même qualité. Ce choix de typage peut même être plus ou
+moins pertinent en fonction du lecteur, qui peut avoir une préférence pour
+l'une ou l'autre des représentations. Tout ceci rend difficile l'évaluation
+de la performance d'un algorithme de récupération de types, puisqu'il est
+difficile d'être objectif sur la pertinence du choix des types de données
+complexes. \\
+L'objectif étant de typer des variables pour rendre un code assembleur plus
+compréhensible, l'utilisation de concepts orientés objets est à envisager.
+En effet, la programmation orientée objet est souvent vue comme étant de
+haut niveau, ce qui signifie qu'elle est assez simple à comprendre pour un
+relecteur. Les concepts qui peuvent être intéressants parmi les concepts
+orientés objet sont : l'héritage et le polymorphisme.
+
+
+Une évaluation de la
 difficulté apportée par le microcode par rapport à l'assembleur et 
 l'intégration d'une analyse de type dans le logiciel \textit{insight} est
 également à prévoir.
