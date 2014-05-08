@@ -275,6 +275,19 @@ void init_Fille(struct Fille *f)
 	f->c = 0;
 }
 \end{lstlisting}
+Les langages orientés objet permettent d'utiliser un objet comme s'il 
+s'agissait d'un objet d'un type parent. On pourrait ainsi écrire, avec le
+code de l'exemple précédent :
+\begin{lstlisting}
+void init_Fille(struct Fille *f)
+{
+	init_Parent(f);
+	f->c = 0;
+}
+\end{lstlisting}
+Le code est similaire, mis à part l'appel à \textit{init\_Parent) qui peut
+se faire directement avec la variable f, puisqu'elle est considérée comme
+étant d'un type qui hérite du type attendu par cette fonction.
 
 Une évaluation de la
 difficulté apportée par le microcode par rapport à l'assembleur et 
