@@ -235,8 +235,46 @@ compréhensible, l'utilisation de concepts orientés objets est à envisager.
 En effet, la programmation orientée objet est souvent vue comme étant de
 haut niveau, ce qui signifie qu'elle est assez simple à comprendre pour un
 relecteur. Les concepts qui peuvent être intéressants parmi les concepts
-orientés objet sont : l'héritage et le polymorphisme.
+orientés objet sont l'héritage et le polymorphisme.
+L'héritage permet de spécialiser un objet, ce qui signifie qu'on lui ajoute
+des attributs tout en conservant ceux dont il dispose déjà. On peut ainsi
+représenter grâce à un héritage une structure qui est toujours à
+l'intérieur d'une autre structure. La structure contenue dans l'autre
+correspond alors au parent de la structure qui la contient, qui est donc une
+structure fille. Par exemple, dans le code ci-dessous, la structure
+\textit{struct Parent} est considérée comme la structure parent de la
+structure \textit{struct Fille} :
+\begin{lstlisting}
+struct Fille
+{
+	struct Parent
+	{
+		int a;
+		int b;
+	} parent;
+	int c;
+};
+\end{lstlisting}
+Cette notion d'héritage permet de faire apparaître la notion de
+polymorphisme. Le polymorphisme est la capacité d'un objet à prendre
+plusieurs formes, autrement dit, ici, la capacité d'une adresse à
+représenter des objets de types différents. Dans le code ci-dessus, en 
+effet, une variable de type \textit{struct Fille} aura la même adresse
+que la structure Parent qu'elle contient. Cela entraîne une difficulté pour
+différencier les deux types, comme le montre le code suivant :
+\begin{lstlisting}
+void init_Parent(struct Parent *p)
+{
+	p->a = 0;
+	p->b = 0;
+}
 
+void init_Fille(struct Fille *f)
+{
+	init_Parent(&(f->parent));
+	f->c = 0;
+}
+\end{lstlisting}
 
 Une évaluation de la
 difficulté apportée par le microcode par rapport à l'assembleur et 
