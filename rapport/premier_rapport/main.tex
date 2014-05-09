@@ -173,9 +173,10 @@ pas de distinction au niveau du processeur entre un pointeur et un entier,
 la plupart des opérations arithmétiques pouvant s'effectuer sur l'un comme
 sur l'autre. À ce propos, la norme du langage C définit précisément les
 différentes opérations autorisées sur les pointeurs. Il est ainsi possible
-d'additionner un pointeur avec un entier, et de soustraire un entier à un
-pointeur en C. Le but ici est d'analyser du code assembleur qui a été
-potentiellement modifié à la main, voire intégralement écrit par un homme,
+d'additionner un pointeur avec un entier, de soustraire un entier à un
+pointeur, et de soustraire un pointeur à un autre pointeur en C. Le but ici
+est d'analyser du code assembleur qui a été
+potentiellement modifié, voire intégralement écrit par un homme,
 et non produit par un compilateur. Il peut arriver, par exemple, avoir besoin
 d'assurer l'alignement d'un pointeur sur un certain nombre d'octets, ce qui
 peut être implémenté à l'aide d'un "et" logique. Si cela est illégal en C,
@@ -205,7 +206,8 @@ typage de ce type d'instructions ne peut donc résulter qu'en une formule
 logique indiquant que l'un est un pointeur et l'autre un entier. Dans le
 premier cas, c'est le registre \textit{ebp} qui est le pointeur, alors que
 dans les autres cas, c'est la constante qui est un pointeur, le registre
-\textit{eax} servant à parcourir le tableau. \\
+\textit{eax} servant à parcourir le tableau.
+\paragraph{}
 La recherche de types complexes demande une analyse différente, qui ne repose
 plus uniquement sur l'analyse des instructions. Pour repérer la présence
 d'une structure, le moyen le plus évident est de constater un accès mémoire
@@ -223,13 +225,15 @@ aucune différence en assembleur entre une structure contenant trois entiers
 et une autre contenant une structure de deux entiers et un entier. 
 Cependant, le but est de rendre un code fastidieux à lire plus simple à
 comprendre, c'est pourquoi chaque choix de représentation peut avoir des
-avantages et des désavantages, mais peuvent finalement apporter des
+avantages et des désavantages, et des choix différents peuvent finalement
+ apporter des
 informations de même qualité. Ce choix de typage peut même être plus ou
 moins pertinent en fonction du lecteur, qui peut avoir une préférence pour
 l'une ou l'autre des représentations. Tout ceci rend difficile l'évaluation
 de la performance d'un algorithme de récupération de types, puisqu'il est
 difficile d'être objectif sur la pertinence du choix des types de données
-complexes. \\
+complexes.
+\paragraph{}
 L'objectif étant de typer des variables pour rendre un code assembleur plus
 compréhensible, l'utilisation de concepts orientés objets est à envisager.
 En effet, la programmation orientée objet est souvent vue comme étant de
@@ -260,8 +264,9 @@ polymorphisme. Le polymorphisme est la capacité d'un objet à prendre
 plusieurs formes, autrement dit, ici, la capacité d'une adresse à
 représenter des objets de types différents. Dans le code ci-dessus, en 
 effet, une variable de type \textit{struct Fille} aura la même adresse
-que la structure Parent qu'elle contient. Cela entraîne une difficulté pour
-différencier les deux types, comme le montre le code suivant :
+que la structure \textit{struct Parent} qu'elle contient. Cela entraîne 
+une difficulté pour différencier les deux types, comme le montre le code
+ suivant :
 \begin{lstlisting}
 void init_Parent(struct Parent *p)
 {
@@ -285,14 +290,38 @@ void init_Fille(struct Fille *f)
 	f->c = 0;
 }
 \end{lstlisting}
-Le code est similaire, mis à part l'appel à \textit{init\_Parent) qui peut
+Le code est similaire, mis à part l'appel à \textit{init\_Parent} qui peut
 se faire directement avec la variable f, puisqu'elle est considérée comme
-étant d'un type qui hérite du type attendu par cette fonction.
+étant d'un type qui hérite du type attendu par cette fonction. Cette syntaxe
+est acceptable si l'héritage entre \textit{struct Parent} et \textit{struct
+Fille} est bien mis en avant.
+\paragraph{}
+Une autre difficulté vient de la présence de conditions dans le code :
+quelle valeur donner à une variable dont le résultat dépend d'une 
+condition ? Le type même d'une telle variable pourrait dépendre de la
+condition. Afin de s'abstraire de cette contrainte, nous avons décidé de
+considérer séparément les différentes exécutions d'un programme. Cela
+permet de connaître l'état du programme à tout moment, c'est-à-dire les
+valeurs des registres et de la mémoire lors de l'exécution de n'importe 
+quelle instruction. Le problème des conditions ne se pose donc plus, puisque
+leur valeur est connue, il n'existe plus d'ambigüité sur les valeurs des
+variables ni sur les branches empruntées par le programme.
+\paragraph{}
+Comme expliqué précédemment, la manière la plus simple de détecter une
+structure est de repérer un accès à une zone mémoire normalement
+inaccessible. Cette notion d'accessibilité se base sur celle de portée
+d'une variable : on tente d'accéder à une zone mémoire qui ne devrait pas
+être visible depuis la fonction actuelle. L'inconvénient est qu'on suppose
+ici que les limites des fonctions sont connues, ce qui pourrait ne pas être
+le cas. Une des questions qui se pose est alors de savoir s'il est possible
+d'obtenir les informations du graphe d'appels, qui relie les lieux d'où
+les fonctions sont appelées aux fonctions, et permet donc dans notre
+cas de typer les paramètres et les valeurs de retour des fonctions. Notre
+approche, qui considère chaque exécution du programme séparément semble
+permettre de retrouver ces informations, car les paramètres sont passés
+soit par registres, soit sur la pile, et dans les deux cas, les valeurs sont
+connues.
 
-Une évaluation de la
-difficulté apportée par le microcode par rapport à l'assembleur et 
-l'intégration d'une analyse de type dans le logiciel \textit{insight} est
-également à prévoir.
 
 \section{Conclusion}
 
